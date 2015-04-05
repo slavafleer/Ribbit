@@ -41,8 +41,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         setContentView(R.layout.activity_main);
 
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // When pressing on back from LoginActivity
+        // this (MainActivity) would be skipped.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);     // need for clear_task
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);   // deleting task history
         startActivity(intent);
 
         // Set up the action bar.
