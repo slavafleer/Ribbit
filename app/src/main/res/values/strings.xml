@@ -17,4 +17,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="sign_up_button_label">Sign Up</string>
     <string name="email_hint">Email</string>
+    <string name="data_missed_alert">Some data was missed!</string>
 </resources>
