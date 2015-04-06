@@ -47,12 +47,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            // When pressing on back from LoginActivity
-            // this (MainActivity) would be skipped.
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);     // need for clear_task
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);   // deleting task history
-            startActivity(intent);
+            navigateToLogin();
         } else {
             Log.e(TAG, currentUser.getUsername());
         }
@@ -92,6 +87,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
+    private void navigateToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        // When pressing on back from LoginActivity
+        // this (MainActivity) would be skipped.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);     // need for clear_task
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);   // deleting task history
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,8 +112,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            ParseUser.logOut();
+            navigateToLogin();
         }
 
         return super.onOptionsItemSelected(item);
