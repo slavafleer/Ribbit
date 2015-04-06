@@ -21,11 +21,13 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:screenOrientation="portrait"
             android:parentActivityName=".LoginActivity">
         </activity>
