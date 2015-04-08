@@ -8,4 +8,5 @@ public final class ParseConstants {
 
     // Field names
     public final static String KEY_USERNAME = "username";
+    public final static String KEY_FRIENDS_RELATION = "friendsRelation";
 }
