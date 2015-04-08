@@ -23,4 +23,11 @@
     <string name="menu_edit_friends">Edit Friends</string>
     <string name="title_activity_edit_friends">Edit Friends</string>
     <string name="edit_friends_loading_list">Loading Friend List</string>
+    <string name="menu_camera_label">Camera</string>
+    <array name="camera_choices">
+        <item>Take Picture</item>
+        <item>Take Video</item>
+        <item>Choose Picture</item>
+        <item>Choose Video</item>
+    </array>
 </resources>
