@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                         Toast.makeText(MainActivity.this, getString(R.string.error_external_storage),
                                 Toast.LENGTH_LONG).show();
                     } else {
-                        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, TAKE_PHOTO_REQUEST);
+                        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
                         startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                     }
                     break;
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                                 Toast.LENGTH_LONG).show();
                     } else {
                         videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10); // in seconds
+                        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5); // in seconds
                         videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 - for low res
                         startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
                     }
