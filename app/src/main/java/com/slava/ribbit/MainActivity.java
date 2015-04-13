@@ -21,6 +21,9 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -37,6 +40,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+
+    public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10MB
 
     protected Uri mMediaUri;
 
@@ -71,8 +76,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     }
                     break;
                 case 2: // Choose picture
+                    Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    choosePhotoIntent.setType("image/*"); // filter for images files
+                    startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
                     break;
                 case 3: // Choose video
+                    Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    chooseVideoIntent.setType("video/*"); // filter for video files
+                    Toast.makeText(MainActivity.this, getString(R.string.video_file_size_warning),
+                            Toast.LENGTH_LONG).show();
+                    startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                     break;
             }
         }
@@ -197,10 +210,48 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK) {
-            // Add it to gallery
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            mediaScanIntent.setData(mMediaUri);
-            sendBroadcast(mediaScanIntent);
+            if(requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
+                if(data == null) {
+                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
+                } else {
+                    mMediaUri = data.getData();
+                }
+
+                Log.i(TAG, "Media URI: " + mMediaUri);
+                if(requestCode == PICK_VIDEO_REQUEST) {
+                    // Make shure that the file is less than 10MB
+                    int fileSize = 0;
+                    InputStream inputStream = null;
+
+                    try {
+                        inputStream = getContentResolver().openInputStream(mMediaUri);
+                        fileSize = inputStream.available();
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(this, getString(R.string.error_opening_file),
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    } catch (IOException e) {
+                        Toast.makeText(this, getString(R.string.error_opening_file),
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    } finally { // Always must to close Streams at the end
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) { /* Intentionally blank */ }
+                    }
+
+                    if(fileSize >= FILE_SIZE_LIMIT) {
+                        Toast.makeText(this, getString(R.string.error_file_size_to_large),
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
+            } else {
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                mediaScanIntent.setData(mMediaUri);
+                sendBroadcast(mediaScanIntent);
+            }
         } else if(resultCode != RESULT_CANCELED) {
             Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
         }
