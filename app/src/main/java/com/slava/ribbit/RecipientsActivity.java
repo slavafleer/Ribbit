@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,7 +32,6 @@ public class RecipientsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_recipients);
 
         mRecipientsList = (ListView) findViewById(R.id.recipientsListView);
@@ -53,7 +51,6 @@ public class RecipientsActivity extends ActionBarActivity {
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> friends, ParseException e) {
-                setProgressBarIndeterminateVisibility(true);
                 if (e == null) {
                     mFriends = friends;
 
@@ -70,7 +67,6 @@ public class RecipientsActivity extends ActionBarActivity {
                             usernames
                     );
 
-                    setProgressBarIndeterminateVisibility(false);
                     mRecipientsList.setAdapter(adapter);
                     mRecipientsList.setEmptyView(mRecipientsEmpty);
 

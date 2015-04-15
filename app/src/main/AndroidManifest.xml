@@ -51,8 +51,7 @@
             android:name=".RecipientsActivity"
             android:label="@string/title_activity_recipients"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.slava.ribbit.MainActivity" />
