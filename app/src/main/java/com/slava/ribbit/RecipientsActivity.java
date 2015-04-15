@@ -1,13 +1,14 @@
 package com.slava.ribbit;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -18,19 +19,24 @@ import com.parse.ParseUser;
 import java.util.List;
 
 
-public class RecipientsActivity extends ListActivity {
+public class RecipientsActivity extends ActionBarActivity {
     public static final String TAG = RecipientsActivity.class.getSimpleName();
 
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
 
+    protected ListView mRecipientsList;
+    protected TextView mRecipientsEmpty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipients);
 
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mRecipientsList = (ListView) findViewById(R.id.recipientsListView);
+        mRecipientsEmpty = (TextView) findViewById(R.id.recipientsEmpty);
+        mRecipientsList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     @Override
@@ -56,11 +62,14 @@ public class RecipientsActivity extends ListActivity {
                         i++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getListView().getContext(),
+                            mRecipientsList.getContext(),
                             android.R.layout.simple_list_item_checked,
                             usernames
                     );
-                    setListAdapter(adapter);
+
+                    mRecipientsList.setAdapter(adapter);
+                    mRecipientsList.setEmptyView(mRecipientsEmpty);
+
                 } else {
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this)
