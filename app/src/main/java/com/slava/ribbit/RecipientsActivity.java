@@ -1,6 +1,7 @@
 package com.slava.ribbit;
 
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -14,10 +15,13 @@ import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,9 +31,12 @@ public class RecipientsActivity extends ActionBarActivity {
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
-
     protected ListView mRecipientsList;
     protected TextView mRecipientsEmpty;
+    protected MenuItem sendMenuItem;
+
+    protected Uri mMediaUri;
+    protected String mFileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +47,17 @@ public class RecipientsActivity extends ActionBarActivity {
         mRecipientsEmpty = (TextView) findViewById(R.id.recipientsEmpty);
         mRecipientsList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+        mMediaUri = getIntent().getData();
+        mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+
         mRecipientsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
+                if(mRecipientsList.getCheckedItemCount() > 0) {
+                    sendMenuItem.setVisible(true);
+                } else {
+                    sendMenuItem.setVisible(false);
+                }
             }
         });
     }
@@ -96,6 +110,8 @@ public class RecipientsActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_recipients, menu);
+        // Send button is first item in menu.
+        sendMenuItem = menu.getItem(0);
         return true;
     }
 
@@ -107,12 +123,48 @@ public class RecipientsActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send ) {
+            ParseObject message = creatMessage();
+            //send(message);
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    protected ParseObject creatMessage() {
+        ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+        message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_USERNAME, ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENTS_IDS, getRecipientIds());
+        message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
 
+        byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+        if(fileBytes == null) {
+            return null;
+        } else {
+            if(mFileType.equals(ParseConstants.TYPE_IMAGE)) {
+                fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+            }
+
+            String fileName = FileHelper.getFileName(this, mMediaUri, mFileType);
+            ParseFile file = new ParseFile(fileName, fileBytes);
+            message.put(ParseConstants.KEY_FILE, file);
+
+            return message;
+        }
+    }
+
+
+    protected ArrayList<String> getRecipientIds() {
+        ArrayList<String> recipientIds = new ArrayList<String>();
+        for(int i = 0; i < mRecipientsList.getCount(); i++) {
+            if(mRecipientsList.isItemChecked(i)) {
+                recipientIds.add(mFriends.get(i).getObjectId());
+            }
+        }
+
+        return recipientIds;
+    }
 }
