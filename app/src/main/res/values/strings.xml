@@ -43,4 +43,5 @@
     <string name="message_sent_text">Message sent.</string>
     <string name="menu_meassage_label">Message</string>
     <string name="title_activity_message">Messenger</string>
+    <string name="undefind_text">(undefined)</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.slava.ribbit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -32,10 +33,14 @@ public class MessageActivity extends ActionBarActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(s.toString().equals("")) {
-                sendMenuItem.setVisible(false);
-            } else {
-                sendMenuItem.setVisible(true);
+            try {
+                if(s.toString().equals("")) {
+                    sendMenuItem.setVisible(false);
+                } else {
+                    sendMenuItem.setVisible(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -63,9 +68,11 @@ public class MessageActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send_message) {
-
-
-            return true;
+            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+            String fileType = ParseConstants.TYPE_TEXT;
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
+            recipientsIntent.putExtra( ParseConstants.KEY_MESSAGE, mMessage.getText().toString());
+            startActivity(recipientsIntent);
         }
 
         return super.onOptionsItemSelected(item);
