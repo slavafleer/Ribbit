@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -20,6 +21,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,7 @@ public class RecipientsActivity extends ActionBarActivity {
         mRecipientsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mRecipientsList.getCheckedItemCount() > 0) {
+                if (mRecipientsList.getCheckedItemCount() > 0) {
                     sendMenuItem.setVisible(true);
                 } else {
                     sendMenuItem.setVisible(false);
@@ -125,12 +127,42 @@ public class RecipientsActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send ) {
             ParseObject message = creatMessage();
-            //send(message);
 
+            if(message == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.message_error_title))
+                        .setMessage(getString(R.string.message_error_text))
+                        .setPositiveButton(android.R.string.ok, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                send(message);
+                // Closing this activity
+                finish();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void send(ParseObject message) {
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Toast.makeText(RecipientsActivity.this,
+                            getString(R.string.message_sent_text), Toast.LENGTH_LONG).show();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this)
+                            .setTitle(getString(R.string.message_error_title))
+                            .setMessage(getString(R.string.message_error_text))
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
     }
 
     protected ParseObject creatMessage() {

@@ -38,4 +38,7 @@
     <string name="title_activity_recipients">Choose Recipients</string>
     <string name="empty_recipients_list_message">Choose some friends first!</string>
     <string name="menu_send_label">Send</string>
+    <string name="message_error_title">We are sorry.</string>
+    <string name="message_error_text">There was an error with selected file. Please choose another one.</string>
+    <string name="message_sent_text">Message sent.</string>
 </resources>
