@@ -8,5 +8,5 @@
             android:icon="@drawable/ic_action_send_now"
             android:orderInCategory="100"
             app:showAsAction="always"
-            android:visible="true"/>
+            android:visible="false"/>
 </menu>

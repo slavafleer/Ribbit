@@ -2,6 +2,8 @@ package com.slava.ribbit;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -11,6 +13,7 @@ public class MessageActivity extends ActionBarActivity {
     private EditText mMessage;
     private MenuItem sendMenuItem;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,8 +21,29 @@ public class MessageActivity extends ActionBarActivity {
 
         mMessage = (EditText) findViewById(R.id.messageField);
 
-
+        mMessage.addTextChangedListener(watcher);
     }
+
+    TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if(s.toString().equals("")) {
+                sendMenuItem.setVisible(false);
+            } else {
+                sendMenuItem.setVisible(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
