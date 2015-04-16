@@ -33,15 +33,11 @@ public class MessageActivity extends ActionBarActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            try {
                 if(s.toString().equals("")) {
                     sendMenuItem.setVisible(false);
                 } else {
                     sendMenuItem.setVisible(true);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
