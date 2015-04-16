@@ -39,6 +39,7 @@ public class RecipientsActivity extends ActionBarActivity {
 
     protected Uri mMediaUri;
     protected String mFileType;
+    protected String mTextMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class RecipientsActivity extends ActionBarActivity {
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+        mTextMessage = getIntent().getExtras().getString("message");
 
         mRecipientsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,7 +128,7 @@ public class RecipientsActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send ) {
-            ParseObject message = creatMessage();
+            ParseObject message = createMessage();
 
             if(message == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -165,12 +167,13 @@ public class RecipientsActivity extends ActionBarActivity {
         });
     }
 
-    protected ParseObject creatMessage() {
+    protected ParseObject createMessage() {
         ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
         message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
         message.put(ParseConstants.KEY_USERNAME, ParseUser.getCurrentUser().getUsername());
         message.put(ParseConstants.KEY_RECIPIENTS_IDS, getRecipientIds());
         message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
+        message.put(ParseConstants.TYPE_TEXT, mTextMessage);
 
         byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
         if(fileBytes == null) {
@@ -186,6 +189,7 @@ public class RecipientsActivity extends ActionBarActivity {
 
             return message;
         }
+
     }
 
 

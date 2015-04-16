@@ -6,6 +6,8 @@ package com.slava.ribbit;
 public final class ParseConstants {
     // Class name
     public static final String CLASS_MESSAGES = "Messages";
+    public static final String CLASS_TEXT_MESSAGES = "TextMessages";
+
     // Field names
     public final static String KEY_USERNAME = "username";
     public final static String KEY_FRIENDS_RELATION = "friendsRelation";
@@ -17,4 +19,5 @@ public final class ParseConstants {
 
     public final static String TYPE_IMAGE = "image";
     public final static String TYPE_VIDEO = "video";
+    public static final String TYPE_TEXT = "text";
 }
