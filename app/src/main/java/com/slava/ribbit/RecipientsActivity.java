@@ -174,7 +174,7 @@ public class RecipientsActivity extends ActionBarActivity {
     protected ParseObject creatMessage() {
         ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
         message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
-        message.put(ParseConstants.KEY_USERNAME, ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
         message.put(ParseConstants.KEY_RECIPIENTS_IDS, getRecipientIds());
         message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
         message.put(ParseConstants.KEY_MESSAGE, mMessage);

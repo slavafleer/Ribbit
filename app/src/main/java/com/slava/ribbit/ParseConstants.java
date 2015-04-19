@@ -15,6 +15,7 @@ public final class ParseConstants {
     public final static String KEY_FILE = "file";
     public final static String KEY_FILE_TYPE = "fileType";
     public final static String KEY_MESSAGE = "message";
+    public final static String KEY_CREATED_AT = "createdAt";
 
     public final static String TYPE_IMAGE = "image";
     public final static String TYPE_VIDEO = "video";

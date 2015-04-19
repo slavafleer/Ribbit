@@ -25,4 +25,6 @@ dependencies {
     // for Parse SDK
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+    // for viewing images from internet
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
