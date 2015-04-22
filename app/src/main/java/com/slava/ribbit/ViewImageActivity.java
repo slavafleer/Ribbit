@@ -32,7 +32,7 @@ public class ViewImageActivity extends ActionBarActivity {
 
                 finish();
             }
-        }, 10 * 1000); // in milliseconds
+        }, 20 * 1000); // in milliseconds
     }
 
     @Override

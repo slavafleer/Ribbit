@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -77,25 +78,31 @@ public class InboxFragment extends ListFragment {
 
         ParseObject message = mMessages.get(position);
         String messageType = message.getString(ParseConstants.KEY_FILE_TYPE);
-        ParseFile file = message.getParseFile(ParseConstants.KEY_FILE);
-        String messageText = message.getString(ParseConstants.KEY_MESSAGE);
-        Uri fileUri = Uri.parse(file.getUrl());
+
 
         switch (messageType) {
             case ParseConstants.TYPE_TEXT:
+                String messageText = message.getString(ParseConstants.KEY_MESSAGE);
+
                 // View Text Message
-                //Toast.makeText(getActivity(), messageText, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), messageText, Toast.LENGTH_LONG).show();
                 break;
             case ParseConstants.TYPE_IMAGE:
+                ParseFile imageFile = message.getParseFile(ParseConstants.KEY_FILE);
+                Uri imageFileUri = Uri.parse(imageFile.getUrl());
+
                 // View Image
                 Intent imageIntent = new Intent(getActivity(), ViewImageActivity.class);
-                imageIntent.setData(fileUri);
+                imageIntent.setData(imageFileUri);
                 startActivity(imageIntent);
                 break;
             case ParseConstants.TYPE_VIDEO:
+                ParseFile videoFile = message.getParseFile(ParseConstants.KEY_FILE);
+                Uri videoFileUri = Uri.parse(videoFile.getUrl());
+
                 // View Video
-                Intent videoIntent = new Intent(Intent.ACTION_VIEW, fileUri);
-                videoIntent.setDataAndType(fileUri, "video/*");
+                Intent videoIntent = new Intent(Intent.ACTION_VIEW, videoFileUri);
+                videoIntent.setDataAndType(videoFileUri, "video/*");
                 startActivity(videoIntent);
                 break;
         }
